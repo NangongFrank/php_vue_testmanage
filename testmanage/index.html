@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <link rel="stylesheet" type="text/css" href="./static/layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="./css/index.css">
+    <meta charset="UTF-8" />
+    <title>课题管理系统</title>
+    <script src="./static/js/jquery.min.js"></script>
+    <script src="./static/js/vue.min.js"></script>
+    <script src="./static/js/vue-router.min.js"></script>
+    <script src="./static/js/vue-resource.min.js"></script>
+    <script src="./static/js/vuex.min.js"></script>
+</head>
+<body class="bg">
+<div class="app">
+    <div class="header">
+        <h1>
+        <span>课题任务</span>
+        </h1>
+        <ul class="nav">
+            <router-link :to="{path : '/home'}" tag="li">主页</router-link>
+            <router-link :to="{name : 'testcenter'}" tag="li">任务大厅</router-link>
+        </ul>
+    </div>
+    <div class="content">
+        <div class="wrapper">
+            <div class="content-left" :style="isAll">
+                <router-view></router-view>
+            </div>
+            <div class="content-right" v-show="isRegest">
+                <router-view name="user"
+                @res="response($event)"></router-view>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <span>版权所有&copy;&ensp;韫泽集团</span>
+        <span>桃李不言&nbsp;下自成蹊&ensp;--&ensp;<small>南宫韫泽</small></span>
+    </div>
+</div>
+
+<script src="./js/tools.js"></script>
+<script src="./js/router.js"></script>
+<script src="./js/store.js"></script>
+<script src="./static/layui/layui.js"></script>
+<script src="./static/My97DatePicker/WdatePicker.js"></script>
+<script type="text/javascript">
+    Vue.component("user-alter", tools.userUpload)
+    Vue.component("teacher-alter", tools.teacherUpload)
+    Vue.component("user-tast", tools.userTask)
+    Vue.component("recode-info", tools.recodeInfo)
+     new Vue({
+        methods : {
+            response : function (obj) {
+                console.log(obj)
+            }
+        },
+        data : {
+            isRegest : true,
+            isAll : {}
+        },
+        store: store,
+        created : function () {
+            var vm = this,
+                path = vm.$route.path
+            if (path == '/regest') {
+                vm.isRegest = false
+                vm.isAll = {width : "auto"}
+            }
+        },
+        watch : {
+            '$route' : function (val) {
+                var vm = this
+                if (val.path != '/regest') {
+                    vm.isRegest = true
+                    vm.isAll = {}
+                } else {
+                    vm.isRegest = false
+                    vm.isAll = {width : "auto"}
+                }
+            }
+        },
+        router : router
+     }).$mount(".app")
+     // 登录框跟随效果
+     window.onscroll = function () {
+        var viewTop = $(window).scrollTop(),
+            absTop = $('.wrapper .content-left').offset().top,
+            top
+        top = viewTop - absTop
+        if (top <= 0) {
+            top = 0
+        }
+        top += 10
+        top += 'px'
+        $(".content-right .user-box").css("top", top)
+     }
+</script>
+</body>
+</html>

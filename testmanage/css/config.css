@@ -1,0 +1,6 @@
+em {
+  font-style: normal;
+}
+.router-link-exact-active {
+  color: #c2c2c2;
+}
